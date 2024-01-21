@@ -1,7 +1,19 @@
-all: handicap-calculator
+objects =  main.o users.o calculator.o
 
-handicap-calculator: handicap-calculator.o
-	g++ -o handicap-calculator handicap-calculator.o
+all: calculator 
 
-handicap-calculator.o: handicap-calculator.cpp handicap-calculator.h
-	g++ -c handicap-calculator.cpp
+calculator: $(objects)
+	g++ -o calculator $(objects)
+
+main.o: main.cpp
+	g++ -c main.cpp
+
+calculator.o: calculator.cpp calculator.h
+	g++ -c calculator.cpp
+
+users.o: users.cpp users.h
+	g++ -c users.cpp
+
+clean: 
+	rm -f *.o handicap-calculator
+	rm -f calculator
