@@ -1,18 +1,11 @@
-objects =  main.o users.o calculator.o
+CXX = g++
+CXXFLAGS = -Wall -Werror -pedantic -g --std=c++17 -Wno-sign-compare -Wno-comment
+EXECUTABLE = handicap-calculator
+PROJECTFILE = main.cpp
+SOURCES = $(wildcard *.cpp)
 
-all: calculator 
-
-calculator: $(objects)
-	g++ -o calculator $(objects)
-
-main.o: main.cpp
-	g++ -c main.cpp
-
-calculator.o: calculator.cpp calculator.h
-	g++ -c calculator.cpp
-
-users.o: users.cpp users.h
-	g++ -c users.cpp
+all: 
+	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(EXECUTABLE)
 
 clean: 
 	rm -f *.o handicap-calculator
