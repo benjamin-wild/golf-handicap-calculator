@@ -9,7 +9,8 @@ private:
 	// relation from user to most recent courses played
 	unordered_map<string, deque<Course>> users;
 	string username; 
-	int num_courses;  
+	int num_courses; 
+
 public:
 	//main function that orchestrates calculating handicaps 
 	//for different users. Reads its variables from the input

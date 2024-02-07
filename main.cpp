@@ -2,14 +2,17 @@
 
 #include <iostream>
 #include <string>
+#include <sqlite3.h>
 #include "users.h"
 
+//Command Line Input 
+//   <Executable> <Number of Threads> Input_File
 int main(int argc, char *argv[])
 {
     // Determine Help functionality or Action
     // Help Menu
     if (argc != 1){
-        std::cout << "Usage " << argv[0] << " < in-txt-file\n";
+        std::cout << "Usage " << argv[0] << " <number of threads> in-txt-file\n";
         std::cout << "In txt file should contain #users followed by user name\n";
         std::cout << "and number of courses for each respective user\n";
         std::cout << "Each line following must contain course played\n";
