@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
         cout << "Usage " << argv[0] << " This program will calculate a\n";
         cout << "users current handicap differential based off the 20 most\n";
         cout << "scores. Note, 20 scores are not required for this calculator\n";
-        cout << "to function properly\n";
+        cout << "to function properly. This interactive tool allows users to \n" <<
+            "store thier data for easier use later on.";
         exit(1);
     }
     // Connect to Database
