@@ -59,8 +59,15 @@ int main(int argc, char *argv[])
         string testing_q = "SELECT * FROM users;"; 
         cout << "Current State of Table 'users'\n"; 
         // Table should be populated already
-        sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL); 
-
+        try{
+            if(sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
+                throw std::runtime_error(std::string("Failed query ") + testing_q); 
+            } 
+        }
+        catch(const std::exception &e) {
+            cout << e.what() << "\n"; 
+            exit(1); 
+        }
         /*  Create thread to handle user input/program outputting, 
             thread to handle database accesses, and thread to handle
             any necessary computations. (not sure about the need of the last one)*/
