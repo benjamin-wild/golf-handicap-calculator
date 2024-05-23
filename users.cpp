@@ -1,6 +1,14 @@
 #include "users.h"
 
 /**
+ * Determines whether a user is a new user or has an existing account.
+ * Confirms that their password matches to their username
+ */
+void Users::login(){
+
+}
+
+/**
  * Handling function which handles prompting the current user for the
  * desired action they want to take - getting their handicap,
  * calculating their handicap for a new course, or inputting their

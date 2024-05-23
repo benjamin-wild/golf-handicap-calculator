@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
         }
         /*  Create thread to handle user input/program outputting, 
             thread to handle database accesses, and thread to handle
-            any necessary computations. (not sure about the need of the last one)*/
+            any necessary computations. (not sure about the need of the last one) */
 
         sqlite3_close(db); 
     }
