@@ -15,10 +15,12 @@ void Users::login(){
  * handicap score from a course previously played.
  */
 void Users::prompt_user(){
-    while(true){
-        string action; 
-        std::cout << "Please select an action: Input Score | Calculate Handicap | Calculate Course Handicap\n"; 
+    bool isUsing = true; 
+    while(isUsing){
+        int action; 
+        std::cout << "Please select an action: Input Score(1) | Calculate Handicap(2) | Calculate Course Handicap(3) | End Session(4)\n"; 
         std::cin >> action;
+        isUsing = false; 
     }
 }
 
