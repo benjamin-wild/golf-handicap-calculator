@@ -14,6 +14,13 @@ private:
 	int num_courses; 
 
 public:
+	// Default Ctor
+	Users(); 
+
+	string getUsername(); 
+	void setUsername(string username); 
+	string getPassword(); 
+	void setPassword(string password); 
 	/**
 	 * Determines whether a user is a new user or has an existing account. 
 	 * Confirms that their password matches to their username
