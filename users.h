@@ -17,6 +17,8 @@ public:
 	// Default Ctor
 	Users(); 
 
+	// Some type of hashing function for the passwords
+	// 
 	string getUsername(); 
 	void setUsername(string username); 
 	string getPassword(); 

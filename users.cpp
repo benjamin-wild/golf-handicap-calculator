@@ -5,7 +5,8 @@
  * Confirms that their password matches to their username
  */
 void Users::login(){
-    
+    //Prompt user for login information - username and password
+    //Connect to DB to 
 }
 
 /**
