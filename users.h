@@ -9,20 +9,27 @@ private:
 	// relation from user to most recent courses played
 	unordered_map<string, deque<Course>> users;
 
-	// TODO - make a class/struct for specific user information/store in db
-	string username; 
+	string username;
+	string password;  
 	int num_courses; 
 
 public:
 	// Default Ctor
 	Users(); 
 
-	// Some type of hashing function for the passwords
-	// 
-	string getUsername(); 
-	void setUsername(string username); 
-	string getPassword(); 
-	void setPassword(string password); 
+	// getters and setters
+	string getUsername(){
+		return username; 
+	} 
+	void setUsername(string username_in){
+		username = username_in; 
+	} 
+	string getPassword(){
+		return password; 
+	} 
+	void setPassword(string password_in){
+		password = password_in; 
+	} 
 	/**
 	 * Determines whether a user is a new user or has an existing account. 
 	 * Confirms that their password matches to their username
