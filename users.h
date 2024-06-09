@@ -4,37 +4,20 @@
 #include <deque>
 #include "calculator.h"
 
-class Users{
+class Calculate{
 private:
 	// relation from user to most recent courses played
 	unordered_map<string, deque<Course>> users;
 
 	string username;
-	string password;  
+	string password; 
 	int num_courses; 
 
 public:
-	// Default Ctor
-	Users(); 
-
-	// getters and setters
-	string getUsername(){
-		return username; 
-	} 
-	void setUsername(string username_in){
-		username = username_in; 
-	} 
-	string getPassword(){
-		return password; 
-	} 
-	void setPassword(string password_in){
-		password = password_in; 
-	} 
 	/**
-	 * Determines whether a user is a new user or has an existing account. 
-	 * Confirms that their password matches to their username
+	 * Returns the handicap to the user via std out
 	*/
-	void login(); 
+	void retrieve_handicap(); 
 
 	/**
 	 * Handling function which handles prompting the current user for the 
@@ -42,7 +25,7 @@ public:
 	 * calculating their handicap for a new course, or inputting their 
 	 * handicap score from a course previously played. 
 	*/
-	void prompt_user();
+	void calcualte_differential();
 
 	/**
 	 * main function that orchestrates calculating handicaps for different 
