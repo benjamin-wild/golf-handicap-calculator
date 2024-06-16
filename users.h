@@ -1,14 +1,14 @@
 // Contains user(s) who have used the calculator
-
 #include <unordered_map>
 #include <deque>
-#include "calculator.h"
+#include <string>
+#include <iostream>
+
+using std::string;
 
 class Calculate{
 private:
 	// relation from user to most recent courses played
-	unordered_map<string, deque<Course>> users;
-
 	string username;
 	string password; 
 	int num_courses; 
@@ -26,6 +26,12 @@ public:
 	 * handicap score from a course previously played. 
 	*/
 	void calcualte_differential();
+
+	/**
+	 * Inputs a user entry into the local database for 
+	 * persistent storage
+	*/
+	void input_scores(); 
 
 	/**
 	 * main function that orchestrates calculating handicaps for different 

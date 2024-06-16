@@ -1,20 +1,15 @@
 #include "users.h"
 
-/**
- * Handling function which handles prompting the current user for the
- * desired action they want to take - getting their handicap,
- * calculating their handicap for a new course, or inputting their
- * handicap score from a course previously played.
- */
 void Calculate::retrieve_handicap(){
     // Call to read the score inputted
     read_score(); 
 }
 
-/**
- * main function that orchestrates calculating handicaps for different
- * users. Reads its variables from the input file
- */
+void Calculate::input_scores(){
+    // attempt to connect to the database
+    //input score into scores table if possible
+}
+
 void Calculate::read_score(){
     // temp variables 
     string course_name; 
@@ -28,8 +23,13 @@ void Calculate::read_score(){
         // Read in the associated values
         try{
             std::cin >> score >> slope_index >> course_rating >> course_name; 
-        } catch(exception& e) {
+        } catch(std::exception& e) {
             throw e.what(); 
         }
+
+        // input this course into the database
+        
+
+        // calculate the new handicap differential
     }
 }
