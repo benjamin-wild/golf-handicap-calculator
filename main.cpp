@@ -2,16 +2,69 @@
 #include <string>
 #include <sqlite3.h>
 
-#include "users.h"
+#include "calculate.h"
 
 using std::cout; 
 using std::string;
 
-/*  
-    This applicaiton calculates a users handicap from their scores 
-    listed in the database. If the user is new/wants to add scores, 
-    this application allows for that. 
-*/
+/**
+ * main function that orchestrates calculating handicaps for different
+ * users. Reads its variables from the input file
+ */
+void read_score(){
+    // temp variables
+    string course_name;
+    double slope_index, course_rating;
+    int score;
+
+    // Give the correct format for inputting a score
+    std::cout << "Please enter a score in format:\n<Course Name> <Score> <Slope Index> <Course Rating>\n";
+    std::cout << "To quit application, please enter quit | q\n"; 
+
+    // Read in the associated values
+    try{
+        std::cin >> course_name; 
+        if(course_name == "quit"){
+            return; 
+        }
+        std::cin >> score >> slope_index >> course_rating; 
+    }
+    catch (std::exception &e){
+        throw e.what();
+    }
+
+    // Store this in an object and return
+}
+
+/**
+ * Handling function which handles prompting the current user for the
+ * desired action they want to take - getting their handicap,
+ * calculating their handicap for a new course, or inputting their
+ * handicap score from a course previously played.
+ */
+void calcualte_differential(){
+    // pull 20 most recent records from database
+    // calculate the current handicap differential from them
+}
+
+/**
+ * Inputs a user entry into the local database for
+ * persistent storage
+ */
+void input_scores(){
+    // attempt to connect to the database
+    // input score into scores table if possible
+}
+
+/**
+ * Returns the handicap to the user via std out
+ */
+void retrieve_handicap(){
+    while(true){
+        // Call to read the score inputted
+        read_score();
+    }
+}
 
 // Function used to print the data base
 static int callback(void *data, int argc, char **argv, char **azColName){
@@ -26,8 +79,12 @@ static int callback(void *data, int argc, char **argv, char **azColName){
     return 0;
 }
 
-//   Command Line Input 
-//   <Executable> <Number of Threads> Input_File
+/*
+    This applicaiton calculates a users handicap from their scores
+    listed in the database. If the user is new/wants to add scores,
+    this application allows for that.
+*/
+
 int main(int argc, char *argv[])
 {
     // Determine Help functionality or Action
