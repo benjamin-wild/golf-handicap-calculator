@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sqlite3.h>
+#include <memory>
 
 #include "calculate.h"
 
@@ -11,7 +12,7 @@ using std::string;
  * main function that orchestrates calculating handicaps for different
  * users. Reads its variables from the input file
  */
-void read_score(){
+std::unique_ptr<DB_Entry> read_score(){
     // temp variables
     string course_name;
     double slope_index, course_rating;
@@ -34,6 +35,8 @@ void read_score(){
     }
 
     // Store this in an object and return
+    std::unique_ptr<DB_Entry> input = std::make_unique<DB_Entry>(course_name, course_rating, score, slope_index);
+    return input; 
 }
 
 /**
@@ -63,7 +66,9 @@ void retrieve_handicap(){
     while(true){
         // Call to read the score inputted
         read_score();
+        input_scores(); 
     }
+    calcualte_differential(); 
 }
 
 // Function used to print the data base
