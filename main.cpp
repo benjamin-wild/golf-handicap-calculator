@@ -20,7 +20,7 @@ static int callback(void *data, int argc, char **argv, char **azColName){
     printf("\n");
     return 0;
 }
-
+    
 /**
  * main function that orchestrates calculating handicaps for different
  * users. Reads its variables from the input file
@@ -39,7 +39,8 @@ std::unique_ptr<DB_Entry> read_score(){
     try{
         std::cin >> course_name; 
         if(course_name == "quit"){
-            return; 
+            std::cout << "Thank you for using the handicap calculator!\n";
+            exit(0);
         }
         std::cin >> score >> slope_index >> course_rating; 
     }
@@ -50,7 +51,7 @@ std::unique_ptr<DB_Entry> read_score(){
 
     // Store this in an object and return
     std::unique_ptr<DB_Entry> input = std::make_unique<DB_Entry>(course_name, course_rating, score, slope_index);
-    return input; 
+    return input;
 }
 
 /**
@@ -68,7 +69,7 @@ void calcualte_differential(){
  * Inputs a user entry into the local database for
  * persistent storage
  */
-void input_scores(){
+void input_scores(std::unique_ptr<DB_Entry> entry){
     // Connect to Database
     sqlite3 *db;
     char *zErrMsg = nullptr;
@@ -82,11 +83,9 @@ void input_scores(){
         std::cerr << "Can't open database: " << sqlite3_errmsg(db) << "\n";
         return;
     } else {
-        cout << "Opened database successfully\n";
-
         // Run query here
-        string testing_q = "SELECT * FROM users;";
-        cout << "Current State of Table 'users'\n";
+        string testing_q = 
+            "INSERT INTO users (course, score, course_rating, slope_rating) VALUES (?1, ?2, ?3, ?4);";
         // Table should be populated already
         try{
             if (sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
@@ -109,7 +108,7 @@ void retrieve_handicap(){
     while(true){
         // Call to read the score inputted
         std::unique_ptr<DB_Entry> entry = read_score();
-        input_scores(); 
+        input_scores(std::move(entry)); 
     }
     calcualte_differential(); 
 }
