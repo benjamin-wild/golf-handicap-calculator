@@ -65,6 +65,15 @@ void calcualte_differential(){
     // calculate the current handicap differential from them
 }
 
+int open_db(sqlite3 *db_in){
+    int rc = 0;
+
+    // Open database
+    rc = sqlite3_open("var/handicap-calculator.sqlite3", &rc);
+
+    return rc; 
+}
+
 /**
  * Inputs a user entry into the local database for
  * persistent storage
@@ -72,11 +81,8 @@ void calcualte_differential(){
 void input_scores(std::unique_ptr<DB_Entry> entry){
     // Connect to Database
     sqlite3 *db;
-    char *zErrMsg = nullptr;
-    int rc = 0;
-
-    // Open database
-    rc = sqlite3_open("var/handicap-calculator.sqlite3", &db);
+    
+    int rc = open_db(db);
 
     // Check to ensure database opened correctly
     if (rc){
@@ -86,7 +92,6 @@ void input_scores(std::unique_ptr<DB_Entry> entry){
         // Run query here
         string testing_q = 
             "INSERT INTO users (course, score, course_rating, slope_rating) VALUES (?1, ?2, ?3, ?4);";
-        // Table should be populated already
         try{
             if (sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
                 throw std::runtime_error(std::string("Failed query ") + testing_q);
