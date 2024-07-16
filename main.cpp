@@ -66,10 +66,10 @@ void calcualte_differential(){
 }
 
 int open_db(sqlite3 *db_in){
-    int rc = 0;
+    int rc; 
 
     // Open database
-    rc = sqlite3_open("var/handicap-calculator.sqlite3", &rc);
+    rc = sqlite3_open("var/handicap-calculator.sqlite3", &db_in);
 
     return rc; 
 }
@@ -78,11 +78,7 @@ int open_db(sqlite3 *db_in){
  * Inputs a user entry into the local database for
  * persistent storage
  */
-void input_scores(std::unique_ptr<DB_Entry> entry){
-    // Connect to Database
-    sqlite3 *db;
-    
-    int rc = open_db(db);
+void input_scores(std::unique_ptr<DB_Entry> entry, sqlite3 *db, int rc){
 
     // Check to ensure database opened correctly
     if (rc){
@@ -101,8 +97,6 @@ void input_scores(std::unique_ptr<DB_Entry> entry){
             cout << e.what() << "\n";
             exit(1);
         }
-
-        sqlite3_close(db);
     }
 }
 
@@ -110,12 +104,18 @@ void input_scores(std::unique_ptr<DB_Entry> entry){
  * Returns the handicap to the user via std out
  */
 void retrieve_handicap(){
+    // Open the db
+    sqlite3 *db;
+    int rc = open_db(db);
+
     while(true){
         // Call to read the score inputted
         std::unique_ptr<DB_Entry> entry = read_score();
-        input_scores(std::move(entry)); 
+        input_scores(std::move(entry), db, rc); 
     }
     calcualte_differential(); 
+
+    sqlite3_close(db); 
 }
 
 /*
