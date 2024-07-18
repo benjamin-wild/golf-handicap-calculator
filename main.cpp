@@ -62,6 +62,15 @@ std::unique_ptr<DB_Entry> read_score(){
  */
 void calcualte_differential(){
     // pull 20 most recent records from database
+    string query = "SELECT * from scores ORDER BY score_id DESC LIMIT 20"; 
+
+    try{
+        
+    }
+    catch(const std::exception &e){
+        cout << e.what() << "\n";
+        exit(1);
+    }
     // calculate the current handicap differential from them
 }
 
@@ -87,7 +96,9 @@ void input_scores(std::unique_ptr<DB_Entry> entry, sqlite3 *db, int rc){
     } else {
         // Run query here
         string testing_q = 
-            "INSERT INTO users (course, score, course_rating, slope_rating) VALUES (?1, ?2, ?3, ?4);";
+            "INSERT INTO scores (course, score, course_rating, slope_rating) VALUES (" + 
+            entry->get_course_name() + ", " + std::to_string(entry->get_score()) + ", " +
+            std::to_string(entry->get_course_rating()) + ", " + std::to_string(entry->get_slope_rating()) + ")"; 
         try{
             if (sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
                 throw std::runtime_error(std::string("Failed query ") + testing_q);
