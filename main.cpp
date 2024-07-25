@@ -71,6 +71,7 @@ void calcualte_differential(){
         cout << e.what() << "\n";
         exit(1);
     }
+    
     // calculate the current handicap differential from them
 }
 
