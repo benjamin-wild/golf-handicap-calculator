@@ -60,19 +60,19 @@ std::unique_ptr<DB_Entry> read_score(){
  * calculating their handicap for a new course, or inputting their
  * handicap score from a course previously played.
  */
-void calcualte_differential(){
+void calcualte_differential(sqlite3* db_in){
     // pull 20 most recent records from database
     string query = "SELECT * from scores ORDER BY score_id DESC LIMIT 20"; 
 
     try{
-        
+        // calculate the handicap differential in the callback function?
+        // possibly make this the callback function
+
     }
     catch(const std::exception &e){
         cout << e.what() << "\n";
         exit(1);
     }
-    
-    // calculate the current handicap differential from them
 }
 
 int open_db(sqlite3 *db_in){
@@ -88,27 +88,20 @@ int open_db(sqlite3 *db_in){
  * Inputs a user entry into the local database for
  * persistent storage
  */
-void input_scores(std::unique_ptr<DB_Entry> entry, sqlite3 *db, int rc){
-
-    // Check to ensure database opened correctly
-    if (rc){
-        std::cerr << "Can't open database: " << sqlite3_errmsg(db) << "\n";
-        return;
-    } else {
-        // Run query here
-        string testing_q = 
-            "INSERT INTO scores (course, score, course_rating, slope_rating) VALUES (" + 
-            entry->get_course_name() + ", " + std::to_string(entry->get_score()) + ", " +
-            std::to_string(entry->get_course_rating()) + ", " + std::to_string(entry->get_slope_rating()) + ")"; 
-        try{
-            if (sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
-                throw std::runtime_error(std::string("Failed query ") + testing_q);
-            }
+void input_scores(std::unique_ptr<DB_Entry> entry, sqlite3 *db){
+    // Run query here
+    string testing_q = 
+        "INSERT INTO scores (course, score, course_rating, slope_rating) VALUES (" + 
+        entry->get_course_name() + ", " + std::to_string(entry->get_score()) + ", " +
+        std::to_string(entry->get_course_rating()) + ", " + std::to_string(entry->get_slope_rating()) + ")"; 
+    try{
+        if (sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
+            throw std::runtime_error(std::string("Failed query ") + testing_q);
         }
-        catch (const std::exception &e){
-            cout << e.what() << "\n";
-            exit(1);
-        }
+    }
+    catch (const std::exception &e){
+        cout << e.what() << "\n";
+        exit(1);
     }
 }
 
@@ -120,12 +113,17 @@ void retrieve_handicap(){
     sqlite3 *db;
     int rc = open_db(db);
 
+    if(rc){
+        std::cerr << "Can't open database: " << sqlite3_errmsg(db) << "\n";
+        return;
+    }
+
     while(true){
         // Call to read the score inputted
         std::unique_ptr<DB_Entry> entry = read_score();
-        input_scores(std::move(entry), db, rc); 
+        input_scores(std::move(entry), db); 
     }
-    calcualte_differential(); 
+    calcualte_differential(db); 
 
     sqlite3_close(db); 
 }
