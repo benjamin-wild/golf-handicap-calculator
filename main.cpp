@@ -60,18 +60,11 @@ std::unique_ptr<DB_Entry> read_score(){
  * calculating their handicap for a new course, or inputting their
  * handicap score from a course previously played.
  */
-void calcualte_differential(sqlite3* db_in){
-    // pull 20 most recent records from database
-    string query = "SELECT * from scores ORDER BY score_id DESC LIMIT 20"; 
-
-    try{
-        // calculate the handicap differential in the callback function?
-        // possibly make this the callback function
-
-    }
-    catch(const std::exception &e){
-        cout << e.what() << "\n";
-        exit(1);
+int calcualte_differential(void *data, int argc, char **argv, char **azColName){
+    // need to store the data not print it
+    
+    for(int i = 0; i < argc; ++i){
+        // Store db row in some adt for later calculation
     }
 }
 
@@ -123,7 +116,18 @@ void retrieve_handicap(){
         std::unique_ptr<DB_Entry> entry = read_score();
         input_scores(std::move(entry), db); 
     }
-    calcualte_differential(db); 
+    // pull 20 most recent records from database
+    string query = "SELECT * from scores ORDER BY score_id DESC LIMIT 20";
+
+    try{
+        if (sqlite3_exec(db, query.c_str(), calcualte_differential, NULL, NULL)){
+            throw std::runtime_error(std::string("Failed query ") + query);
+        }
+    }
+    catch (const std::exception &e){
+        cout << e.what() << "\n";
+        exit(1);
+    }
 
     sqlite3_close(db); 
 }
