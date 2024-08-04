@@ -1,6 +1,4 @@
-// Contains user(s) who have used the calculator
-#include <unordered_map>
-#include <deque>
+#include <queue>
 #include <string>
 #include <iostream>
 
@@ -8,10 +6,10 @@ using std::string;
 
 class DB_Entry{
 private:
-    string course_name; 
-    double course_rating;
     int score;
     int slope_index; 
+    double course_rating;
+    string course_name; 
 public:
     DB_Entry(){
         course_name = ""; 
@@ -46,4 +44,4 @@ public:
     void set_slope_index(int slope_index_in){ slope_index = slope_index_in; }
 
     int get_slope_rating(){ return slope_index; }
-};  
+};

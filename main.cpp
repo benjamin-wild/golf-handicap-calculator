@@ -2,13 +2,16 @@
 #include <string>
 #include <sqlite3.h>
 #include <memory>
+#include <algorithm>
 
 #include "calculate.h"
 
 using std::cout; 
 using std::string;
 
-// Function used to print the data base
+/**
+ * Used for debugging - prints the entire database line by line
+*/
 static int callback(void *data, int argc, char **argv, char **azColName){
     int i;
     fprintf(stderr, "%s: ", (const char *)data);
@@ -38,7 +41,7 @@ std::unique_ptr<DB_Entry> read_score(){
     // Read in the associated values
     try{
         std::cin >> course_name; 
-        if(course_name == "quit"){
+        if(course_name == "quit" || course_name == "q"){
             std::cout << "Thank you for using the handicap calculator!\n";
             exit(0);
         }
@@ -60,12 +63,15 @@ std::unique_ptr<DB_Entry> read_score(){
  * calculating their handicap for a new course, or inputting their
  * handicap score from a course previously played.
  */
-int calcualte_differential(void *data, int argc, char **argv, char **azColName){
-    // need to store the data not print it
-    
-    for(int i = 0; i < argc; ++i){
-        // Store db row in some adt for later calculation
-    }
+int average_handicap(void *data, int argc, char **argv, char **azColName){
+    std::vector<double>* result = static_cast<std::vector<double>*>(data);
+
+    // only one column returned
+    result->push_back(argv[0] ? std::stod(argv[0]) : 100); 
+}
+
+double calculate(int score, int course_rating, double slope_rating){
+    return (113 / slope_rating) * (score - course_rating);
 }
 
 int open_db(sqlite3 *db_in){
@@ -82,11 +88,16 @@ int open_db(sqlite3 *db_in){
  * persistent storage
  */
 void input_scores(std::unique_ptr<DB_Entry> entry, sqlite3 *db){
+    // calculate actual handicap for course
+    double handicap = calculate(entry->get_score(), 
+                            entry->get_course_rating(), entry->get_slope_rating()); 
+
     // Run query here
     string testing_q = 
-        "INSERT INTO scores (course, score, course_rating, slope_rating) VALUES (" + 
+        "INSERT INTO scores (course, score, course_rating, slope_rating, handicap) VALUES (" + 
         entry->get_course_name() + ", " + std::to_string(entry->get_score()) + ", " +
-        std::to_string(entry->get_course_rating()) + ", " + std::to_string(entry->get_slope_rating()) + ")"; 
+        std::to_string(entry->get_course_rating()) + ", " + std::to_string(entry->get_slope_rating()) +
+        ", " + std::to_string(handicap) + ")"; 
     try{
         if (sqlite3_exec(db, testing_q.c_str(), callback, NULL, NULL)){
             throw std::runtime_error(std::string("Failed query ") + testing_q);
@@ -117,10 +128,11 @@ void retrieve_handicap(){
         input_scores(std::move(entry), db); 
     }
     // pull 20 most recent records from database
-    string query = "SELECT * from scores ORDER BY score_id DESC LIMIT 20";
+    string query = "SELECT handicap from scores ORDER BY score_id DESC LIMIT 20";
 
+    std::vector<double> data; 
     try{
-        if (sqlite3_exec(db, query.c_str(), calcualte_differential, NULL, NULL)){
+        if (sqlite3_exec(db, query.c_str(), average_handicap, &data, NULL)){
             throw std::runtime_error(std::string("Failed query ") + query);
         }
     }
@@ -128,6 +140,17 @@ void retrieve_handicap(){
         cout << e.what() << "\n";
         exit(1);
     }
+
+    sort(data.begin(), data.end());
+    // only 8 best of out last 20 scores are used for handicap
+    int added; 
+    double total; 
+    for(int i = 0; i < (8 || data.size()); ++i){
+        total += data[i]; 
+        added++;  
+    } 
+
+    cout << "\bYour current handicap is: " << (total / added) << '\n'; 
 
     sqlite3_close(db); 
 }

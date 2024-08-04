@@ -5,5 +5,6 @@ CREATE TABLE scores(
   course VARCHAR(64) NOT NULL,  
   score INTEGER NOT NULL, 
   slope_rating REAL NOT NULL, 
-  course_rating REAL NOT NULL, 
+  course_rating REAL NOT NULL,
+  handicap REAL NOT NULL, 
 );
